@@ -60,10 +60,8 @@ public final class PostcodeUtil {
             .put("PH12SJ", "St Johnstone Football Club")
             .put("S24SU", "Sheffield United Football Club")
             .put("S61SW", "Sheffield Wednesday Football Club")
-            .put("S147UP", "The World Snooker Championships at the Crucible Theatre, Sheffield;[54] 147 UP refers to a " +
-                    "maximum lead (from a maximum break) in snooker")
-            .put("SA99", "Driver and Vehicle Licensing Agency All postcodes starting with SA99 are for the DVLA offices " +
-                    "in the Morriston area of Swansea, the final part of the postcode relates to the specific office or department within the DVLA")
+            .put("S147UP", "The World Snooker Championships at the Crucible Theatre, Sheffield;[54] 147 UP refers to a maximum lead (from a maximum break) in snooker")
+            .put("SA99", "Driver and Vehicle Licensing Agency All postcodes starting with SA99 are for the DVLA offices in the Morriston area of Swansea, the final part of the postcode relates to the specific office or department within the DVLA")
             .put("SE10NE", "One America Street, the London headquarters of architectural firm TP Bennett")
             .put("SE18UJ", "Union Jack Club")
             .put("SM60HB", "Homebase Limited")

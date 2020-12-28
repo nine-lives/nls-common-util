@@ -9,7 +9,7 @@ class LocalDatesSpec extends Specification {
     @Unroll("I can get the max for a set of dates - #d1 and #d2")
     def "I can get the max for a set of dates"() {
         when:
-        LocalDate result = LocalDates.max(left, right);
+        LocalDate result = LocalDates.max((LocalDate) left, (LocalDate) right);
 
         then:
         result == expected

@@ -4,6 +4,7 @@ import com.google.common.collect.ComparisonChain;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
+import org.joda.time.YearMonth;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,12 +26,13 @@ public class LocalDateRange implements Comparable<LocalDateRange>, Iterable<Loca
         return new LocalDateRange(from, from.plusMonths(1).minusDays(1));
     }
 
-    public static LocalDateRange forWeekStartingMonday(LocalDate date) {
-        return forWeek(date, DateTimeConstants.MONDAY);
+    public static LocalDateRange forMonth(YearMonth date) {
+        LocalDate from = date.toLocalDate(1);
+        return new LocalDateRange(from, from.plusMonths(1).minusDays(1));
     }
 
-    public static LocalDateRange forDay(LocalDate day) {
-        return new LocalDateRange(day, day);
+    public static LocalDateRange forWeekStartingMonday(LocalDate date) {
+        return forWeek(date, DateTimeConstants.MONDAY);
     }
 
     public static LocalDateRange forWeek(LocalDate date, int startOfWeek) {

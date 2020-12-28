@@ -12,6 +12,10 @@ public final class Ids {
 
     }
 
+    public static <T extends HasId> T find(Collection<T> identifiables, int id) {
+        return identifiables.stream().filter(o -> o.getId() != null && o.getId() == id).findFirst().orElse(null);
+    }
+
     public static <T extends HasId> Set<Integer> collect(Collection<T> identifiables) {
         return identifiables.stream().map(HasId::getId).collect(Collectors.toSet());
     }
@@ -20,7 +24,4 @@ public final class Ids {
         return identifiables.stream().collect(Collectors.toMap(HasId::getId, Function.identity()));
     }
 
-    public static <T extends HasId> T get(Collection<T> identifiables, int id) {
-        return identifiables.stream().filter(o -> o.getId() != null && o.getId() == id).findFirst().orElse(null);
-    }
 }

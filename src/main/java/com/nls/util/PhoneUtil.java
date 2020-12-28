@@ -25,14 +25,14 @@ public final class PhoneUtil {
 
     public static String normalise(String phoneRaw) {
         if (!valid(phoneRaw)) {
-            return phoneRaw;
+            return phoneRaw == null ? null : phoneRaw.replaceAll(" ", "");
         }
 
         return prettify(phoneRaw).replaceAll(" ", "");
     }
 
     public static String prettify(String phoneRaw) {
-        if (phoneRaw == null || phoneRaw.isEmpty()) {
+        if (phoneRaw == null || phoneRaw.isEmpty() || !valid(phoneRaw)) {
             return phoneRaw;
         }
 
