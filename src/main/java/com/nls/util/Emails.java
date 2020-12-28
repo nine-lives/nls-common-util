@@ -56,7 +56,7 @@ public final class Emails {
         return valid(email) || validDomain(email);
     }
 
-    public static String stripTrailingSlashes(String email) {
+    private static String stripTrailingSlashes(String email) {
         return email.replaceAll("/+$", "");
     }
 }
