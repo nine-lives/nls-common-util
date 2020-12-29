@@ -22,7 +22,7 @@ public final class Countries {
     public static final Country NO_COUNTRY = new Country("___", "__", "Global");
     private static final Logger LOGGER = LoggerFactory.getLogger(Countries.class);
 
-    private static Countries DEFAULT = build();
+    private static Countries defaultCountries = build();
 
     private final List<Country> countries;
     private final Map<String, Country> isoMap;
@@ -84,7 +84,7 @@ public final class Countries {
     }
 
     public static void setDefault(Countries countries) {
-        DEFAULT = countries;
+        defaultCountries = countries;
     }
 
     public static Comparator<Country> getCountryComparator(Locale locale) {
@@ -178,30 +178,30 @@ public final class Countries {
 
 
     public static List<Country> get() {
-        return DEFAULT.getCountries();
+        return defaultCountries.getCountries();
     }
 
     public static List<Country> get(Locale locale) {
-        return DEFAULT.getCountries(locale);
+        return defaultCountries.getCountries(locale);
     }
 
     public static Country fromIso(String iso) {
-        return DEFAULT.findIso(iso);
+        return defaultCountries.findIso(iso);
     }
 
     public static Country fromCode(String code) {
-        return DEFAULT.findCode(code);
+        return defaultCountries.findCode(code);
     }
 
     public static Country fromName(String name) {
-        return DEFAULT.findName(name);
+        return defaultCountries.findName(name);
     }
 
     public static Country fromWordMap(String name) {
-        return DEFAULT.findWordMap(name);
+        return defaultCountries.findWordMap(name);
     }
 
     public static Country from(String token) {
-        return DEFAULT.find(token);
+        return defaultCountries.find(token);
     }
 }

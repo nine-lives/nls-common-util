@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Locale;
 
 public final class Country implements Comparable<Country>, Serializable {
-    private static final long serialVersionUID = 3034071008358122639L;
     private final Locale locale;
     private final String iso;
     private final String code;

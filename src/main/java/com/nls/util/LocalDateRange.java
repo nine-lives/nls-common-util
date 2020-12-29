@@ -1,25 +1,18 @@
 package com.nls.util;
 
-import com.google.common.collect.ComparisonChain;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.YearMonth;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
-public class LocalDateRange implements Comparable<LocalDateRange>, Iterable<LocalDate> {
-    private final LocalDate from;
-    private final LocalDate to;
-
+public class LocalDateRange extends IterableRange<LocalDate> {
     public LocalDateRange(LocalDate from, LocalDate to) {
-        this.from = from.isAfter(to) ? to : from;
-        this.to = from.isAfter(to) ? from : to;
+        super(from, to);
     }
+
 
     public static LocalDateRange forMonth(LocalDate date) {
         LocalDate from = date.withDayOfMonth(1);
@@ -44,11 +37,6 @@ public class LocalDateRange implements Comparable<LocalDateRange>, Iterable<Loca
         return new LocalDateRange(from, from.plusDays(6));
     }
 
-
-    public static boolean inRangeSet(Set<LocalDateRange> ranges, LocalDate date) {
-        return ranges.stream().anyMatch(r -> r.inRange(date));
-    }
-
     public static List<LocalDateRange> getListOfMonths(LocalDate now, int months) {
         List<LocalDateRange> list = new ArrayList<>();
         LocalDate epoch = now.withDayOfMonth(1);
@@ -71,94 +59,34 @@ public class LocalDateRange implements Comparable<LocalDateRange>, Iterable<Loca
 
     public List<LocalDateRange> getListOfMonths() {
         List<LocalDateRange> list = new ArrayList<>();
-        LocalDate cursor = from.withDayOfMonth(1);
-        while (!cursor.isAfter(to)) {
+        LocalDate cursor = getFrom().withDayOfMonth(1);
+        while (!cursor.isAfter(getTo())) {
             list.add(LocalDateRange.forMonth(cursor));
             cursor = cursor.plusMonths(1);
         }
         return list;
     }
 
-    public LocalDate getFrom() {
-        return from;
-    }
-
-    public LocalDate getTo() {
-        return to;
-    }
-
-    public LocalDate getToExclusive() {
-        return to.plusDays(1);
-    }
-
-    public boolean inRange(LocalDate date) {
-        return !date.isBefore(from) && !date.isAfter(to);
-    }
-
-    public boolean intersects(LocalDateRange that) {
-        return !this.from.isAfter(that.to) && !this.to.isBefore(that.from);
-    }
-
-    public boolean contains(LocalDateRange that) {
-        return !this.from.isAfter(that.from) && !this.to.isBefore(that.to);
-    }
-
-    public boolean overlaps(LocalDateRange that) {
-        return this.intersects(that) && !this.contains(that) && !that.contains(this);
-    }
-
     public List<LocalDate> getDates() {
-        List<LocalDate> dates = new ArrayList<>();
-        for (LocalDate cursor = from; !cursor.isAfter(to); cursor = cursor.plusDays(1)) {
-            dates.add(cursor);
-        }
-        return dates;
+        return getValues();
     }
 
     public int getNumberOfDays() {
-        return Days.daysBetween(from, to).getDays() + 1;
+        return getSize();
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        LocalDateRange that = (LocalDateRange) o;
-        return Objects.equals(this.from, that.from)
-                && Objects.equals(this.to, that.to);
+    public int getSize() {
+        return Days.daysBetween(getFrom(), getTo()).getDays() + 1;
     }
 
     @Override
-    public int hashCode() {
-        int result = from.hashCode();
-        result = 31 * result + to.hashCode();
-        return result;
+    protected Range<LocalDate> make(LocalDate from, LocalDate to) {
+        return new LocalDateRange(from, to);
     }
 
     @Override
-    public int compareTo(LocalDateRange o) {
-        return ComparisonChain.start()
-                .compare(from, o.from)
-                .compare(to, o.to)
-                .result();
-    }
-
-    @Override
-    public String toString() {
-        return "LocalDateRange{" +
-                "from=" + from +
-                ", to=" + to +
-                '}';
-    }
-
-    @Override
-    public Iterator<LocalDate> iterator() {
-        return getDates().iterator();
+    protected LocalDate step(LocalDate element, int count) {
+        return element.plusDays(count);
     }
 }

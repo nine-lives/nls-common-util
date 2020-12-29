@@ -10,7 +10,7 @@ sourceCompatibility = 1.8
 
 group = 'com.9ls'
 archivesBaseName = "common-util"
-version = '1.0.1'
+version = '1.0.2'
 
 jacoco {
     toolVersion = "0.8.2"
@@ -46,13 +46,13 @@ dependencies {
     compile "org.slf4j:jcl-over-slf4j:${versions.slf4j}"
     compile "org.slf4j:slf4j-log4j12:${versions.slf4j}"
 
-    compile 'joda-time:joda-time:2.8'
-    compile 'org.apache.commons:commons-csv:1.4'
     compile 'com.google.guava:guava:18.0'
     compile 'com.googlecode.libphonenumber:libphonenumber:8.10.23'
     compile 'commons-io:commons-io:2.2'
+    compile 'joda-time:joda-time:2.8'
+    compile 'net.coobird:thumbnailator:0.4.8'
+    compile 'org.apache.commons:commons-csv:1.4'
     compile 'org.hibernate:hibernate-validator:5.2.4.Final'
-
     compile "org.springframework:spring-beans:${versions.springframework}"
 
     testCompile group: 'junit', name: 'junit', version: '4.12'

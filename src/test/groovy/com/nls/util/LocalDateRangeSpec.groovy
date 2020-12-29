@@ -16,7 +16,7 @@ class LocalDateRangeSpec extends Specification {
         then:
         range.from.equals(LocalDate.parse(from))
         range.to.equals(LocalDate.parse(to))
-        range.inRange(ld)
+        range.contains(ld)
         range.equals(LocalDateRange.forWeekStartingMonday(ld))
         range.hashCode() == LocalDateRange.forWeekStartingMonday(ld).hashCode()
         range.compareTo(LocalDateRange.forWeekStartingMonday(ld)) == 0
@@ -47,10 +47,10 @@ class LocalDateRangeSpec extends Specification {
         range1.hashCode() != range2.hashCode()
         range1.compareTo(range2) < 0
         range2.compareTo(range1) > 0
-        range1.inRange(ld1)
-        !range1.inRange(ld2)
-        !range2.inRange(ld1)
-        range2.inRange(ld2)
+        range1.containsValue(ld1)
+        !range1.containsValue(ld2)
+        !range2.containsValue(ld1)
+        range2.containsValue(ld2)
     }
 
     def "I can check a set of ranges"() {
@@ -213,4 +213,57 @@ class LocalDateRangeSpec extends Specification {
         'Next Day' | '2020-08-09' | '2020-08-10' | 2
     }
 
+    def "I can get the range values"() {
+        when:
+        LocalDateRange range = new LocalDateRange(
+                LocalDate.parse('2020-08-10'),
+                LocalDate.parse('2020-08-10'))
+
+        List<LocalDate> values = range.values
+
+        then:
+        values.size() == 1
+        values.get(0) == LocalDate.parse('2020-08-10')
+
+        when:
+        range = new LocalDateRange(
+                LocalDate.parse('2020-08-10'),
+                LocalDate.parse('2020-08-13'))
+
+        values = range.values
+
+        then:
+        values.size() == 4
+        values.get(0) == LocalDate.parse('2020-08-10')
+        values.get(1) == LocalDate.parse('2020-08-11')
+        values.get(2) == LocalDate.parse('2020-08-12')
+        values.get(3) == LocalDate.parse('2020-08-13')
+    }
+
+    def "I can iterate the value"() {
+        when:
+        LocalDateRange range = new LocalDateRange(
+                LocalDate.parse('2020-08-10'),
+                LocalDate.parse('2020-08-10'))
+
+        List<LocalDate> values = range.iterator().collect()
+
+        then:
+        values.iterator().count({true}) == 1
+        values.get(0) == LocalDate.parse('2020-08-10')
+
+        when:
+        range = new LocalDateRange(
+                LocalDate.parse('2020-08-10'),
+                LocalDate.parse('2020-08-13'))
+
+        values = range.iterator().collect()
+
+        then:
+        values.iterator().count({true}) == 4
+        values.get(0) == LocalDate.parse('2020-08-10')
+        values.get(1) == LocalDate.parse('2020-08-11')
+        values.get(2) == LocalDate.parse('2020-08-12')
+        values.get(3) == LocalDate.parse('2020-08-13')
+    }
 }

@@ -38,8 +38,8 @@ public class Tuple<K, V> implements Serializable {
         }
         Tuple<?, ?> tuple = (Tuple<?, ?>) o;
 
-        return Objects.equal(key, tuple.key) &&
-                Objects.equal(value, tuple.value);
+        return Objects.equal(key, tuple.key)
+                && Objects.equal(value, tuple.value);
     }
 
     @Override

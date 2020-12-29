@@ -3,11 +3,11 @@ package com.nls.util
 import org.joda.time.DateTime
 import spock.lang.Specification
 
-class DateTimeRangeGraphSpec extends Specification {
+class DateTimeRangeSetSpec extends Specification {
 
     def "I can add disconnected"() {
         when:
-            DateTimeRangeGraph g = new DateTimeRangeGraph();
+            DateTimeRangeSet g = new DateTimeRangeSet();
             g.add(new DateTimeRange(
                     DateTime.parse('2017-08-14T10:30:00'),
                     DateTime.parse('2017-08-14T11:30:00')));
@@ -21,7 +21,7 @@ class DateTimeRangeGraphSpec extends Specification {
 
     def "I can merge abutting"() {
         when:
-        DateTimeRangeGraph g = new DateTimeRangeGraph();
+        DateTimeRangeSet g = new DateTimeRangeSet();
         g.add(new DateTimeRange(
                 DateTime.parse('2017-08-14T10:30:00'),
                 DateTime.parse('2017-08-14T11:30:00')));
@@ -35,7 +35,7 @@ class DateTimeRangeGraphSpec extends Specification {
 
     def "I can add instersected"() {
         when:
-        DateTimeRangeGraph g = new DateTimeRangeGraph();
+        DateTimeRangeSet g = new DateTimeRangeSet();
         g.add(new DateTimeRange(
                 DateTime.parse('2017-08-14T10:30:00'),
                 DateTime.parse('2017-08-14T11:30:00')));
@@ -51,7 +51,7 @@ class DateTimeRangeGraphSpec extends Specification {
 
     def "I can add overlap"() {
         when:
-        DateTimeRangeGraph g = new DateTimeRangeGraph();
+        DateTimeRangeSet g = new DateTimeRangeSet();
         g.add(new DateTimeRange(
                 DateTime.parse('2017-08-14T11:00:00'),
                 DateTime.parse('2017-08-14T12:00:00')));
@@ -70,7 +70,7 @@ class DateTimeRangeGraphSpec extends Specification {
 
     def "I can add overlap reverse"() {
         when:
-        DateTimeRangeGraph g = new DateTimeRangeGraph();
+        DateTimeRangeSet g = new DateTimeRangeSet();
         g.add(new DateTimeRange(
                 DateTime.parse('2017-08-14T10:30:00'),
                 DateTime.parse('2017-08-14T12:30:01')));
@@ -89,21 +89,21 @@ class DateTimeRangeGraphSpec extends Specification {
 
     def "I can merge graphs"() {
         when:
-        DateTimeRangeGraph g1 = new DateTimeRangeGraph();
+        DateTimeRangeSet g1 = new DateTimeRangeSet();
         g1.add(new DateTimeRange(
                 DateTime.parse('2017-08-14T10:30:00'),
                 DateTime.parse('2017-08-14T11:00:00')));
         g1.add(new DateTimeRange(
                 DateTime.parse('2017-08-14T13:00:00'),
                 DateTime.parse('2017-08-14T13:30:00')));
-        DateTimeRangeGraph g2 = new DateTimeRangeGraph();
+        DateTimeRangeSet g2 = new DateTimeRangeSet();
         g2.add(new DateTimeRange(
                 DateTime.parse('2017-08-14T11:00:00'),
                 DateTime.parse('2017-08-14T11:30:00')));
         g2.add(new DateTimeRange(
                 DateTime.parse('2017-08-14T13:30:00'),
                 DateTime.parse('2017-08-14T14:00:00')));
-        DateTimeRangeGraph g3 = g1.merge(g2);
+        DateTimeRangeSet g3 = g1.merge(g2);
 
         then:
         g3.ranges.size() == 2

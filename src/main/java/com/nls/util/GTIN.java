@@ -33,7 +33,7 @@ public class GTIN {
     }
 
     public boolean isGTIN14() {
-        return gtin.length() == 14;
+        return gtin.length() == GTIN14.LENGTH;
     }
 
     public GTIN14 toGTIN14() {
@@ -41,7 +41,7 @@ public class GTIN {
     }
 
     public boolean isGTIN13() {
-        return gtin.length() == 13;
+        return gtin.length() == GTIN13.LENGTH;
     }
 
     public GTIN13 toGTIN13() {
@@ -49,15 +49,15 @@ public class GTIN {
     }
 
     public boolean isGTIN13Compatible() {
-        return compatible(13);
+        return compatible(GTIN13.LENGTH);
     }
 
     public boolean isGTIN12() {
-        return gtin.length() == 12;
+        return gtin.length() == GTIN12.LENGTH;
     }
 
     public boolean isGTIN12Compatible() {
-        return compatible(12);
+        return compatible(GTIN12.LENGTH);
     }
 
     public GTIN12 toGTIN12() {
@@ -65,11 +65,11 @@ public class GTIN {
     }
 
     public boolean isGTIN8() {
-        return gtin.length() == 8;
+        return gtin.length() == GTIN8.LENGTH;
     }
 
     public boolean isGTIN8Compatible() {
-        return compatible(8);
+        return compatible(GTIN8.LENGTH);
     }
 
     public GTIN8 toGTIN8() {
@@ -127,7 +127,7 @@ public class GTIN {
             return false;
         }
 
-        String s = resize(gtin, 13);
+        String s = resize(gtin, GTIN13.LENGTH);
         return s.charAt(0) == '2' && s.charAt(1) >= '0' && s.charAt(1) <= '5';
     }
 
@@ -150,8 +150,9 @@ public class GTIN {
     }
 
     public static class GTIN8 extends GTIN {
+        public static final int LENGTH = 8;
         public GTIN8(String gtin) {
-            super(gtin, 8);
+            super(gtin, GTIN8.LENGTH);
         }
 
         public GTIN8 toGTIN8() {
@@ -160,8 +161,9 @@ public class GTIN {
     }
 
     public static class GTIN12 extends GTIN {
+        public static final int LENGTH = 12;
         public GTIN12(String gtin) {
-            super(gtin, 12);
+            super(gtin, GTIN12.LENGTH);
         }
 
         public GTIN12 toGTIN12() {
@@ -170,8 +172,9 @@ public class GTIN {
     }
 
     public static class GTIN13 extends GTIN {
+        public static final int LENGTH = 13;
         public GTIN13(String gtin) {
-            super(gtin, 13);
+            super(gtin, GTIN13.LENGTH);
         }
 
         public GTIN13 toGTIN13() {
@@ -180,8 +183,9 @@ public class GTIN {
     }
 
     public static class GTIN14 extends GTIN {
+        public static final int LENGTH = 14;
         public GTIN14(String gtin) {
-            super(gtin, 14);
+            super(gtin, GTIN14.LENGTH);
         }
 
         public GTIN14 toGTIN14() {

@@ -1,25 +1,27 @@
 package com.nls.io;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 public class LimitedByteArrayOutputStream extends OutputStream {
-    private final byte[] buffer;
-    private int offset;
+    private final ByteArrayOutputStream buffer;
+    private int limit;
 
     public LimitedByteArrayOutputStream(int limit) {
-        this.buffer = new byte[limit];
+        this.buffer = new ByteArrayOutputStream(limit);
+        this.limit = limit;
     }
 
     @Override
     public void write(int b) throws IOException {
-        if (offset < buffer.length) {
-            buffer[offset++] = (byte) b;
+        if (buffer.size() < limit) {
+            buffer.write(b);
         }
     }
 
     @Override
     public String toString() {
-        return new String(buffer, 0, offset);
+        return buffer.toString();
     }
 }
