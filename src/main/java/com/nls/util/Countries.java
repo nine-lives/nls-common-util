@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.text.Collator;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,7 +33,7 @@ public final class Countries {
 
 
     private Countries(List<Country> countries) {
-        this.countries = countries;
+        this.countries = Collections.unmodifiableList(countries);
         this.isoMap = countries.stream().collect(Collectors.toMap(Country::getIso, Function.identity()));
         this.codeMap = countries.stream().collect(Collectors.toMap(Country::getCode, Function.identity()));
         this.nameMap = countries.stream().collect(Collectors.toMap(o -> Normalizer.normalize(o.getName().toUpperCase(), Normalizer.Form.NFD), Function.identity()));

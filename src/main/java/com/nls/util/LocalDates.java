@@ -67,8 +67,27 @@ public final class LocalDates {
     }
 
     public static LocalDate tryParse(String string) {
+        if (Strings.isNullOrEmpty(string)) {
+            return null;
+        }
+
         try {
-            return Strings.isNullOrEmpty(string) ? null : LocalDate.parse(string, DateTimeFormat.forPattern("dd/MM/yyyy"));
+            return LocalDate.parse(string.trim(), DateTimeFormat.forPattern("yyyy-MM-dd"));
+        } catch (Throwable ignore) {
+        }
+
+        try {
+            return LocalDate.parse(string.trim(), DateTimeFormat.forPattern("yyyy/MM/dd"));
+        } catch (Throwable ignore) {
+        }
+
+        try {
+            return LocalDate.parse(string.trim(), DateTimeFormat.forPattern("dd/MM/yyyy"));
+        } catch (Throwable ignore) {
+        }
+
+        try {
+            return LocalDate.parse(string.trim(), DateTimeFormat.forPattern("MM/dd/yyyy"));
         } catch (Throwable ignore) {
             return null;
         }

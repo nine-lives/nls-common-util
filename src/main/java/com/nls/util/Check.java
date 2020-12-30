@@ -55,4 +55,10 @@ public final class Check {
         Preconditions.checkArgument(valid, String.format(
                 "field [%s] value is invalid", fieldName));
     }
+
+    public static void state(boolean condition, String fieldName, String message) {
+        Preconditions.checkState(condition, String.format("field [%s] is invalid, error is [%s]",
+                fieldName,
+                message));
+    }
 }
