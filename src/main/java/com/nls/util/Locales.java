@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class Locales {
-    private static LocaleResolver DEFAULT_RESOLVER = new LocaleResolver("en");
+    private static LocaleResolver defaultResolver = new LocaleResolver("en");
 
     private Locales() {
 
@@ -20,7 +20,7 @@ public final class Locales {
      */
     @Deprecated
     public static List<Locale> get() {
-        return DEFAULT_RESOLVER.getLocales();
+        return defaultResolver.getLocales();
     }
 
     /**
@@ -28,7 +28,7 @@ public final class Locales {
      */
     @Deprecated
     public static LocaleResolver getDefaultResolver() {
-        return DEFAULT_RESOLVER;
+        return defaultResolver;
     }
 
     /**
@@ -36,7 +36,7 @@ public final class Locales {
      */
     @Deprecated
     public static void setDefaultResolver(LocaleResolver resolver) {
-        DEFAULT_RESOLVER = resolver;
+        defaultResolver = resolver;
     }
 
     /**
@@ -44,7 +44,7 @@ public final class Locales {
      */
     @Deprecated
     public static Locale resolve(String acceptLanguage, Locale defaultLocale) {
-        return DEFAULT_RESOLVER.resolve(acceptLanguage, defaultLocale);
+        return defaultResolver.resolve(acceptLanguage, defaultLocale);
     }
 
     public static List<Locale> forLanguageTags(String... languageTags) {

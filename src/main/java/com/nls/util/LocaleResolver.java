@@ -4,7 +4,6 @@ import com.google.common.base.Strings;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 public class LocaleResolver {
     private final List<Locale> locales;
@@ -53,9 +52,6 @@ public class LocaleResolver {
         }
         List<Locale.LanguageRange> list = Locale.LanguageRange.parse(acceptLanguage);
         Locale locale = Locale.lookup(list, locales);
-        System.out.println(locales);
-        System.out.println(locales.stream().map(l -> l.toLanguageTag()).collect(Collectors.joining(", ")));
-        list.forEach(lr -> System.out.println(lr.getRange() + " " + lr.getWeight()));
         return locale == null ? defaultLocale : locale;
     }
 }
