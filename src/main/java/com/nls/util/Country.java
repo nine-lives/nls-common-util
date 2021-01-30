@@ -58,7 +58,7 @@ public final class Country implements Comparable<Country>, Serializable {
 
     @Override
     public String toString() {
-        return name + " " + iso;
+        return iso;
     }
 
     public static Country valueOf(String codeOrIso) {

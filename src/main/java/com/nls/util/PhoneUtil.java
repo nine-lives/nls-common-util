@@ -45,4 +45,17 @@ public final class PhoneUtil {
             return phoneRaw;
         }
     }
+
+    public static String prettify(String phoneRaw, String defaultRegion) {
+        if (phoneRaw == null || phoneRaw.isEmpty() || !valid(phoneRaw)) {
+            return phoneRaw;
+        }
+
+        try {
+            Phonenumber.PhoneNumber phone = INSTANCE.parse(phoneRaw, defaultRegion);
+            return INSTANCE.format(phone, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
+        } catch (NumberParseException ignore) {
+            return phoneRaw;
+        }
+    }
 }
