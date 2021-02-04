@@ -37,6 +37,10 @@ public class LocalDateRange extends IterableRange<LocalDate> {
         return new LocalDateRange(from, from.plusDays(6));
     }
 
+    public static LocalDateRange forDay(LocalDate day) {
+        return new LocalDateRange(day, day);
+    }
+
     public static List<LocalDateRange> getListOfMonths(LocalDate now, int months) {
         List<LocalDateRange> list = new ArrayList<>();
         LocalDate epoch = now.withDayOfMonth(1);
