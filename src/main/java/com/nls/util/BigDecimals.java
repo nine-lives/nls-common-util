@@ -3,6 +3,10 @@ package com.nls.util;
 import com.google.common.base.Strings;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 public final class BigDecimals {
     private BigDecimals() {
@@ -37,5 +41,29 @@ public final class BigDecimals {
 
     public static BigDecimal nullToZero(BigDecimal value) {
         return value == null ? BigDecimal.ZERO : value;
+    }
+
+    public static boolean isPositive(BigDecimal value) {
+        return value.signum() == 1;
+    }
+
+    public static boolean isNegative(BigDecimal value) {
+        return value.signum() == -1;
+    }
+
+    public static boolean isPositiveOrZero(BigDecimal value) {
+        return !isNegative(value);
+    }
+
+    public static boolean isNegativeOrZero(BigDecimal value) {
+        return !isPositive(value);
+    }
+
+    public static <E> BigDecimal sum(Collection<E> collection, Function<E, BigDecimal> mapper) {
+        return sum(collection.stream(), mapper);
+    }
+
+    public static <E> BigDecimal sum(Stream<E> stream, Function<E, BigDecimal> mapper) {
+        return stream.map(mapper).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
