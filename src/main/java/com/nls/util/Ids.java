@@ -1,6 +1,7 @@
 package com.nls.util;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -28,4 +29,9 @@ public final class Ids {
     public static <T extends HasId> Map<Integer, T> index(Collection<T> identifiables) {
         return identifiables.stream().collect(Collectors.toMap(HasId::getId, Function.identity()));
     }
+
+    public static <T extends HasId> List<T> select(Collection<T> identifiables, Set<Integer> ids) {
+        return identifiables.stream().filter(o -> ids.contains(o.getId())).collect(Collectors.toList());
+    }
+
 }

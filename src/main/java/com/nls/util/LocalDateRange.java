@@ -79,6 +79,12 @@ public class LocalDateRange extends IterableRange<LocalDate> {
         return getSize();
     }
 
+    public LocalDateRange getExpandToWeekEdges() {
+        return new LocalDateRange(
+                LocalDates.rollToDayOfWeek(getFrom(), DateTimeConstants.MONDAY),
+                LocalDates.rollToDayOfWeek(getTo(), DateTimeConstants.SUNDAY));
+    }
+
     @Override
     public int getSize() {
         return Days.daysBetween(getFrom(), getTo()).getDays() + 1;
