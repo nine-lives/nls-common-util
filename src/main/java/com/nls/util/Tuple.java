@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,11 @@ public class Tuple<K, V> implements Serializable {
         this.value = value;
     }
 
+    public Tuple(Map.Entry<K, V> mapEntry) {
+        this.key = mapEntry.getKey();
+        this.value = mapEntry.getValue();
+    }
+
     public V getValue() {
         return value;
     }
@@ -24,8 +30,19 @@ public class Tuple<K, V> implements Serializable {
         return key;
     }
 
+    public static <K, V> List<Tuple<K, V>> fromMap(Map<K, V> map) {
+        return map.entrySet().stream().map(Tuple::new).collect(Collectors.toList());
+    }
+
     public static <K, V> Map<K, V> toMap(Collection<Tuple<K, V>> tuples) {
         return tuples.stream().filter(t -> t.value != null).collect(Collectors.toMap(Tuple::getKey, Tuple::getValue));
+    }
+
+    public static <K, V> Map<K, List<V>> toGroupedMap(Collection<Tuple<K, V>> tuples) {
+        return tuples.stream().filter(t -> t.value != null).collect(Collectors.groupingBy(Tuple::getKey))
+            .entrySet().stream().collect(Collectors.toMap(
+                Map.Entry::getKey,
+                o -> o.getValue().stream().map(Tuple::getValue).collect(Collectors.toList())));
     }
 
     @Override
