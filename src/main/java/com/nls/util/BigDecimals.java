@@ -31,6 +31,10 @@ public final class BigDecimals {
         return left.compareTo(right) == 0;
     }
 
+    public static boolean equal(BigDecimal left, BigDecimal right, int scale) {
+        return equal(left.setScale(scale, BigDecimal.ROUND_HALF_EVEN), right.setScale(scale, BigDecimal.ROUND_HALF_EVEN));
+    }
+
     public static BigDecimal tryParse(String string) {
         try {
             return Strings.isNullOrEmpty(string) ? null : new BigDecimal(string.trim());
