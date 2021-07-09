@@ -30,6 +30,10 @@ public class Tuple<K, V> implements Serializable {
         return key;
     }
 
+    public Tuple<V, K> reverse() {
+        return new Tuple<>(value, key);
+    }
+
     public static <K, V> List<Tuple<K, V>> fromMap(Map<K, V> map) {
         return map.entrySet().stream().map(Tuple::new).collect(Collectors.toList());
     }

@@ -31,7 +31,7 @@ public class LocalDateRange extends IterableRange<LocalDate> {
     public static LocalDateRange forWeek(LocalDate date, int startOfWeek) {
         LocalDate from = date.withDayOfWeek(startOfWeek);
         if (date.isBefore(from)) {
-            from = from.plusWeeks(1);
+            from = from.minusWeeks(1);
         }
 
         return new LocalDateRange(from, from.plusDays(6));
@@ -79,10 +79,41 @@ public class LocalDateRange extends IterableRange<LocalDate> {
         return getSize();
     }
 
+    public List<LocalDateRange> getWeeks() {
+        List<LocalDateRange> list = new ArrayList<>();
+        LocalDate cursor = LocalDates.rollToDayOfWeek(getFrom(), DateTimeConstants.MONDAY);
+        while (!cursor.isAfter(getTo())) {
+            list.add(LocalDateRange.forWeek(cursor, DateTimeConstants.MONDAY));
+            cursor = cursor.plusWeeks(1);
+        }
+        return list;
+    }
+
     public LocalDateRange getExpandToWeekEdges() {
         return new LocalDateRange(
                 LocalDates.rollToDayOfWeek(getFrom(), DateTimeConstants.MONDAY),
                 LocalDates.rollToDayOfWeek(getTo(), DateTimeConstants.SUNDAY));
+    }
+
+    public LocalDateRange alignToWeeksThatStartInRange() {
+        LocalDateRange range = getExpandToWeekEdges();
+        return new LocalDateRange(
+                range.getFrom().isBefore(getFrom()) ? range.getFrom().plusWeeks(1) : range.getFrom(),
+                range.getTo().isBefore(getTo()) ? range.getTo().plusWeeks(1) : range.getTo());
+    }
+
+    public LocalDateRange alignToWeeksThatEndInRange() {
+        LocalDateRange range = getExpandToWeekEdges();
+        return new LocalDateRange(
+                range.getFrom().isAfter(getFrom()) ? range.getFrom().minusWeeks(1) : range.getFrom(),
+                range.getTo().isAfter(getTo()) ? range.getTo().minusWeeks(1) : range.getTo());
+    }
+
+    public LocalDateRange alignToWeeksContainedInRange() {
+        LocalDateRange range = getExpandToWeekEdges();
+        return new LocalDateRange(
+                range.getFrom().isBefore(getFrom()) ? range.getFrom().plusWeeks(1) : range.getFrom(),
+                range.getTo().isAfter(getTo()) ? range.getTo().minusWeeks(1) : range.getTo());
     }
 
     @Override

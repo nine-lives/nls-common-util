@@ -1,5 +1,7 @@
 package com.nls.util
 
+import org.joda.time.DateTimeConstants
+import org.joda.time.Days
 import org.joda.time.LocalDate
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -52,6 +54,35 @@ class LocalDateRangeSpec extends Specification {
         !range2.containsValue(ld1)
         range2.containsValue(ld2)
     }
+
+    @Unroll("I can set the week starting on a given day #value")
+    def "I can set the week starting on a given day"() {
+
+        when:
+        LocalDateRange range = LocalDateRange.forWeek(LocalDate.parse(date), dow);
+
+        then:
+        range.from == LocalDate.parse(expected)
+
+        where:
+        dow                         | date         | expected
+        DateTimeConstants.MONDAY    | '2021-06-13' | '2021-06-07'
+        DateTimeConstants.MONDAY    | '2021-06-20' | '2021-06-14'
+        DateTimeConstants.TUESDAY   | '2021-06-13' | '2021-06-08'
+        DateTimeConstants.TUESDAY   | '2021-06-20' | '2021-06-15'
+        DateTimeConstants.WEDNESDAY | '2021-06-13' | '2021-06-09'
+        DateTimeConstants.WEDNESDAY | '2021-06-20' | '2021-06-16'
+        DateTimeConstants.THURSDAY  | '2021-06-13' | '2021-06-10'
+        DateTimeConstants.THURSDAY  | '2021-06-20' | '2021-06-17'
+        DateTimeConstants.FRIDAY    | '2021-06-13' | '2021-06-11'
+        DateTimeConstants.FRIDAY    | '2021-06-20' | '2021-06-18'
+        DateTimeConstants.FRIDAY    | '2021-06-14' | '2021-06-11'
+        DateTimeConstants.SATURDAY  | '2021-06-13' | '2021-06-12'
+        DateTimeConstants.SATURDAY  | '2021-06-20' | '2021-06-19'
+        DateTimeConstants.SUNDAY    | '2021-06-13' | '2021-06-13'
+        DateTimeConstants.SUNDAY    | '2021-06-20' | '2021-06-20'
+    }
+
 
     def "I can check a set of ranges"() {
         given:
@@ -318,4 +349,111 @@ class LocalDateRangeSpec extends Specification {
         '2021-08-31' | '2021-07-26' | '2021-09-05'
         '2021-09-30' | '2021-08-30' | '2021-10-03'
     }
+
+    @Unroll("Get range for weeks starting in month - #month")
+    def "Get range for weeks starting in month"() {
+        when:
+        LocalDateRange result = LocalDateRange.forMonth(LocalDate.parse(month)).alignToWeeksThatStartInRange()
+
+        then:
+        result.getFrom() == LocalDate.parse(from)
+        result.getTo() == LocalDate.parse(to)
+
+        where:
+        month        | from         | to
+        '2021-01-01' | '2021-01-04' | '2021-01-31'
+        '2021-02-01' | '2021-02-01' | '2021-02-28'
+        '2021-03-01' | '2021-03-01' | '2021-04-04'
+        '2021-04-01' | '2021-04-05' | '2021-05-02'
+        '2021-05-01' | '2021-05-03' | '2021-06-06'
+        '2021-06-01' | '2021-06-07' | '2021-07-04'
+        '2021-07-01' | '2021-07-05' | '2021-08-01'
+        '2021-08-01' | '2021-08-02' | '2021-09-05'
+        '2021-09-01' | '2021-09-06' | '2021-10-03'
+        '2021-10-01' | '2021-10-04' | '2021-10-31'
+        '2021-11-01' | '2021-11-01' | '2021-12-05'
+        '2021-12-01' | '2021-12-06' | '2022-01-02'
+    }
+
+    @Unroll("Get range for weeks ending in month - #month")
+    def "Get range for weeks ending in month"() {
+        when:
+        LocalDateRange result = LocalDateRange.forMonth(LocalDate.parse(month)).alignToWeeksThatEndInRange()
+
+        then:
+        result.getFrom() == LocalDate.parse(from)
+        result.getTo() == LocalDate.parse(to)
+
+        where:
+        month        | from         | to
+        '2021-01-01' | '2020-12-28' | '2021-01-31'
+        '2021-02-01' | '2021-02-01' | '2021-02-28'
+        '2021-03-01' | '2021-03-01' | '2021-03-28'
+        '2021-04-01' | '2021-03-29' | '2021-04-25'
+        '2021-05-01' | '2021-04-26' | '2021-05-30'
+        '2021-06-01' | '2021-05-31' | '2021-06-27'
+        '2021-07-01' | '2021-06-28' | '2021-07-25'
+        '2021-08-01' | '2021-07-26' | '2021-08-29'
+        '2021-09-01' | '2021-08-30' | '2021-09-26'
+        '2021-10-01' | '2021-09-27' | '2021-10-31'
+        '2021-11-01' | '2021-11-01' | '2021-11-28'
+        '2021-12-01' | '2021-11-29' | '2021-12-26'
+    }
+
+    @Unroll("Get range for weeks contained in month - #month")
+    def "Get range for weeks contained in month"() {
+        when:
+        LocalDateRange result = LocalDateRange.forMonth(LocalDate.parse(month)).alignToWeeksContainedInRange()
+
+        then:
+        result.getFrom() == LocalDate.parse(from)
+        result.getTo() == LocalDate.parse(to)
+
+        where:
+        month        | from         | to
+        '2021-01-01' | '2021-01-04' | '2021-01-31'
+        '2021-02-01' | '2021-02-01' | '2021-02-28'
+        '2021-03-01' | '2021-03-01' | '2021-03-28'
+        '2021-04-01' | '2021-04-05' | '2021-04-25'
+        '2021-05-01' | '2021-05-03' | '2021-05-30'
+        '2021-06-01' | '2021-06-07' | '2021-06-27'
+        '2021-07-01' | '2021-07-05' | '2021-07-25'
+        '2021-08-01' | '2021-08-02' | '2021-08-29'
+        '2021-09-01' | '2021-09-06' | '2021-09-26'
+        '2021-10-01' | '2021-10-04' | '2021-10-31'
+        '2021-11-01' | '2021-11-01' | '2021-11-28'
+        '2021-12-01' | '2021-12-06' | '2021-12-26'
+    }
+
+    @Unroll("Get weeks in range - #month")
+    def "Get weeks in range"() {
+        when:
+        List<LocalDateRange> result = LocalDateRange.forMonth(LocalDate.parse(month)).alignToWeeksContainedInRange().getWeeks()
+
+        then:
+        result.size() == weeks
+        result[0].from == LocalDate.parse(from)
+        result[weeks - 1].to == LocalDate.parse(to)
+        result.each {
+            assert it.from.dayOfWeek == DateTimeConstants.MONDAY
+            assert it.to.dayOfWeek == DateTimeConstants.SUNDAY
+            assert Days.daysBetween(it.from, it.to).days == 6
+        }
+
+        where:
+        month        | from         | to           | weeks
+        '2021-01-01' | '2021-01-04' | '2021-01-31' | 4
+        '2021-02-01' | '2021-02-01' | '2021-02-28' | 4
+        '2021-03-01' | '2021-03-01' | '2021-03-28' | 4
+        '2021-04-01' | '2021-04-05' | '2021-04-25' | 3
+        '2021-05-01' | '2021-05-03' | '2021-05-30' | 4
+        '2021-06-01' | '2021-06-07' | '2021-06-27' | 3
+        '2021-07-01' | '2021-07-05' | '2021-07-25' | 3
+        '2021-08-01' | '2021-08-02' | '2021-08-29' | 4
+        '2021-09-01' | '2021-09-06' | '2021-09-26' | 3
+        '2021-10-01' | '2021-10-04' | '2021-10-31' | 4
+        '2021-11-01' | '2021-11-01' | '2021-11-28' | 4
+        '2021-12-01' | '2021-12-06' | '2021-12-26' | 3
+    }
+
 }
