@@ -1,132 +1,56 @@
-apply plugin: 'java'
-apply plugin: 'groovy'
-apply plugin: 'maven'
-apply plugin: 'signing'
-apply plugin: 'checkstyle'
-apply plugin: 'jacoco'
-apply from: "$rootDir/coverage.gradle"
-
-sourceCompatibility = 1.8
-
 group = 'com.9ls'
-archivesBaseName = "common-util"
-version = '1.0.4'
+version = '1.0.5'
 
-jacoco {
-    toolVersion = "0.8.2"
+project.ext {
+    library_baseName = 'common-util'
+
+    jacoco_limits = [
+            'instruction': 27,
+            'branch'     : 32,
+            'line'       : 24,
+            'complexity' : 29,
+            'method'     : 29,
+            'class'      : 31
+    ]
+
+    jacoco_codecy = true
+
+    publish_name = 'nls-common-util'
+    publish_description = 'Common utility classes'
+    publish_url = 'https://github.com/nine-lives/nls-common-util'
+    publish_scm = 'scm:git@github.com:nine-lives/nls-common-util.git'
+    publish_license = 'https://raw.githubusercontent.com/nine-lives/nls-common-util/master/LICENSE'
+    publish_developerId = 'mgsmith57'
+    publish_developerName = 'Marc G. Smith'
+    publish_developerEmail = 'marc@9ls.com'
+    publish_credentialsUserName = project.hasProperty('ossrhUsername') ? ossrhUsername : ''
+    publish_credentialsPassword = project.hasProperty('ossrhPassword')? ossrhPassword : ''
 }
 
-signing {
-    required { gradle.taskGraph.hasTask('uploadArchives') }
-    sign configurations.archives
-}
-
-checkstyle {
-    configFile = new File(rootDir, "config/checkstyle/checkstyle.xml")
-    showViolations = false
-}
-
-repositories {
-    mavenCentral()
-}
+apply from: "https://raw.githubusercontent.com/nine-lives/gradle-scripts/main/v6/library.gradle"
 
 dependencies {
     ext.versions = [
-//            mysql          : '5.1.31',
-//            powermock      : '1.6.1',
-            slf4j          : '1.7.1',
+            slf4j          : '1.7.32',
             springframework: '4.3.22.RELEASE',
-            tomcat         : '7.0.59'
     ]
 
-    implementation 'com.9ls:bank-account:1.6.3'
+    implementation 'com.9ls:bank-account:1.6.4'
 
-    compile 'log4j:log4j:1.2.17'
-    compile "org.slf4j:slf4j-api:${versions.slf4j}"
-    compile "org.slf4j:jcl-over-slf4j:${versions.slf4j}"
-    compile "org.slf4j:slf4j-log4j12:${versions.slf4j}"
+    implementation 'log4j:log4j:1.2.17'
+    implementation "org.slf4j:slf4j-api:${versions.slf4j}"
+    implementation "org.slf4j:jcl-over-slf4j:${versions.slf4j}"
+    implementation "org.slf4j:slf4j-log4j12:${versions.slf4j}"
 
-    compile 'com.google.guava:guava:18.0'
-    compile 'com.googlecode.libphonenumber:libphonenumber:8.10.23'
-    compile 'commons-io:commons-io:2.2'
-    compile 'joda-time:joda-time:2.8'
-    compile 'net.coobird:thumbnailator:0.4.8'
-    compile 'org.apache.commons:commons-csv:1.4'
-    compile 'org.hibernate:hibernate-validator:5.2.4.Final'
-    compile "org.springframework:spring-beans:${versions.springframework}"
+    implementation 'com.google.guava:guava:30.1.1-jre'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.31'
+    implementation 'commons-io:commons-io:2.2'
+    implementation 'joda-time:joda-time:2.10.10'
+    implementation 'net.coobird:thumbnailator:0.4.14'
+    implementation 'org.apache.commons:commons-csv:1.9.0'
+    implementation 'org.hibernate:hibernate-validator:5.2.4.Final'
+    implementation "org.springframework:spring-beans:${versions.springframework}"
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
-}
-
-test {
-    testLogging {
-        events "failed"
-        exceptionFormat "short"
-    }
-}
-
-tasks.withType(Test) {
-    reports.html.destination = file("${reporting.baseDir}/${name}")
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from tasks.javadoc.destinationDir
-}
-
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier = 'sources'
-}
-
-artifacts {
-    archives jar
-    archives javadocJar
-    archives sourcesJar
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: project.hasProperty('ossrhUsername') ? ossrhUsername : '', password: project.hasProperty('ossrhPassword')? ossrhPassword : '')
-            }
-
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: (project.hasProperty('ossrhUsername') ? ossrhUsername : ''), password: (project.hasProperty('ossrhPassword')? ossrhPassword : ''))
-            }
-
-            pom.project {
-                name 'nls-common-util'
-                packaging 'jar'
-                description 'Common utility classes'
-                url 'https://github.com/nine-lives/nls-common-util'
-
-                scm {
-                    url 'scm:git@github.com:nine-lives/nls-common-util.git'
-                    connection 'scm:git@github.com:nine-lives/nls-common-util.git'
-                    developerConnection 'scm:git@github.com:nine-lives/nls-common-util.git'
-                }
-
-                licenses {
-                    license {
-                        name 'The MIT License (MIT)'
-                        url 'https://raw.githubusercontent.com/nine-lives/nls-common-util/master/LICENSE'
-                        distribution 'repo'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'mgsmith57'
-                        name 'Marc G. Smith'
-                        email 'marc@9ls.com'
-                    }
-                }
-            }
-        }
-    }
+    testImplementation(platform('org.junit:junit-bom:5.7.2'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
 }

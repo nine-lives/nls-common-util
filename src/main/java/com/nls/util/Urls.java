@@ -2,12 +2,39 @@ package com.nls.util;
 
 import com.google.common.base.Strings;
 
+import java.net.URL;
 import java.text.Normalizer;
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class Urls {
 
     private Urls() {
 
+    }
+
+    public static Map<String, List<String>> splitQuery(URL url) {
+        if (Strings.isNullOrEmpty(url.getQuery())) {
+            return Collections.emptyMap();
+        }
+        return Arrays.stream(url.getQuery().split("&"))
+                .map(Urls::splitQueryParameter)
+                .collect(Collectors.groupingBy(
+                        AbstractMap.SimpleImmutableEntry::getKey,
+                        LinkedHashMap::new,
+                        Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
+    }
+
+    private static AbstractMap.SimpleImmutableEntry<String, String> splitQueryParameter(String it) {
+        final int idx = it.indexOf("=");
+        final String key = idx > 0 ? it.substring(0, idx) : it;
+        final String value = idx > 0 && it.length() > idx + 1 ? it.substring(idx + 1) : null;
+        return new AbstractMap.SimpleImmutableEntry<>(key, value);
     }
 
     public static String prependParams(String url, String params) {

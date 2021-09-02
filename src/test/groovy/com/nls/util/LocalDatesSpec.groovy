@@ -6,7 +6,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 class LocalDatesSpec extends Specification {
-    @Unroll("I can get the max for a set of dates - #d1 and #d2")
+    @Unroll("I can get the max for a set of dates - #left and #right")
     def "I can get the max for a set of dates"() {
         when:
         LocalDate result = LocalDates.max((LocalDate) left, (LocalDate) right);
@@ -24,7 +24,7 @@ class LocalDatesSpec extends Specification {
         LocalDate.parse('2020-08-01') | LocalDate.parse('2020-09-01') | LocalDate.parse('2020-09-01')
     }
 
-    @Unroll("I can roll to the right day in the same week - #d1 and #d2")
+    @Unroll("I can roll to the right day in the same week - #date and #day")
     def "I can roll to the right day in the same week"() {
         when:
         LocalDate result = LocalDates.rollToDayOfWeek(LocalDate.parse(date), day);

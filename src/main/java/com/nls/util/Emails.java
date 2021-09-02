@@ -4,10 +4,14 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public final class Emails {
     private static final Pattern DOMAIN_FORMAT_PATTERN = Pattern.compile("^@.+\\..+$");
@@ -40,6 +44,16 @@ public final class Emails {
         return new LinkedHashSet<>(asList(value));
     }
 
+    public static Map<String, String> asMap(String value) {
+        return Arrays.stream(Strings.nullToEmpty(value).split("[\n;,]"))
+                .map(String::trim)
+                .filter(o -> !o.isEmpty())
+                .collect(Collectors.toMap(
+                    Emails::normalise,
+                    Function.identity(),
+                    (l, r) -> l));
+    }
+
     public static String normalise(String email) {
         return stripTrailingSlashes(Strings.nullToEmpty(email)).toLowerCase().trim();
     }
@@ -58,5 +72,9 @@ public final class Emails {
 
     private static String stripTrailingSlashes(String email) {
         return email.replaceAll("/+$", "");
+    }
+
+    public static String domain(String email) {
+        return email.substring(email.indexOf("@") + 1);
     }
 }

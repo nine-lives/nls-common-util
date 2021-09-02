@@ -3,5 +3,7 @@
 <suppressions>
     <!-- relax rules in unit tests -->
     <suppress checks="FileLength_Error|AvoidStaticImport|ClassFanOutComplexity|ClassDataAbstractionCoupling|IllegalInstantiation|IllegalThrows|MagicNumber|MethodCount|ParameterNumber" files=".*Test.java"/>
-    <suppress checks="ClassDataAbstractionCoupling" files="com.vzaar.client.RestClient.java"/>
+    <suppress checks="ClassTypeParameterName|MethodTypeParameterName" files="com.nls.util.Triplet.java"/>
+    <suppress checks="IllegalImport" files="com.nls.util.ThumbnailGenerator.java"/>
+    <suppress checks="NPathComplexity" files="com.nls.util.LocalDates.java"/>
 </suppressions>

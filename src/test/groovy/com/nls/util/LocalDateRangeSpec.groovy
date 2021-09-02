@@ -55,7 +55,7 @@ class LocalDateRangeSpec extends Specification {
         range2.containsValue(ld2)
     }
 
-    @Unroll("I can set the week starting on a given day #value")
+    @Unroll("I can set the week starting on a given day #dow - #date")
     def "I can set the week starting on a given day"() {
 
         when:
