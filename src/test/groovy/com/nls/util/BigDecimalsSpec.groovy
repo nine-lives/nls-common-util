@@ -26,7 +26,7 @@ class BigDecimalsSpec extends Specification {
     @Unroll("I can test if two BigDecimals are equal for #left and #right")
     def "I can test if two BigDecimals are equal"() {
         when:
-        boolean result = BigDecimals.equal(new BigDecimal(left), new BigDecimal(right))
+        boolean result = BigDecimals.equal(left == null ? null : new BigDecimal(left), right == null ? null : new BigDecimal(right))
 
         then:
         result == expected
@@ -38,6 +38,9 @@ class BigDecimalsSpec extends Specification {
         '-1.1'    | '-1.100'  | true
         '-0.0001' | '0.0001'  | false
         '0.0001'  | '0.00011' | false
+        null      | null      | true
+        null      | '1.1'     | false
+        '1.1'     | null      | false
     }
 
     @Unroll("I can test if two BigDecimals are equal when scaled for #left and #right")

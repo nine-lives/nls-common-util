@@ -6,7 +6,7 @@ import java.io.OutputStream;
 
 public class LimitedByteArrayOutputStream extends OutputStream {
     private final ByteArrayOutputStream buffer;
-    private int limit;
+    private final int limit;
 
     public LimitedByteArrayOutputStream(int limit) {
         this.buffer = new ByteArrayOutputStream(limit);
