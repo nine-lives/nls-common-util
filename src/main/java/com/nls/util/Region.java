@@ -14,8 +14,12 @@ public class Region {
     private final List<Country> countries;
 
     public Region(Regions.Name code, String name, String... countries) {
+        this(Countries.getDefault(), code, name, countries);
+    }
+
+    public Region(Countries countryFilter, Regions.Name code, String name, String... countries) {
         this(code, name, Arrays.stream(countries)
-                .map(Countries::fromIso)
+                .map(countryFilter::findIso)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList()));
     }

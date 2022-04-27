@@ -23,14 +23,15 @@ public final class Countries {
     public static final Country NO_COUNTRY = new Country("___", "__", "Global");
     private static final Logger LOGGER = LoggerFactory.getLogger(Countries.class);
 
-    private static Countries defaultCountries = build();
+    private static final List<Country> COUNTRIES = build();
+    private static final Countries ALL_COUNTRIES = new Countries(COUNTRIES);
+    private static Countries defaultCountries = ALL_COUNTRIES;
 
     private final List<Country> countries;
     private final Map<String, Country> isoMap;
     private final Map<String, Country> codeMap;
     private final Map<String, Country> nameMap;
     private final Map<String, Country> wordMap;
-
 
     private Countries(List<Country> countries) {
         this.countries = Collections.unmodifiableList(countries);
@@ -40,7 +41,7 @@ public final class Countries {
         this.wordMap = buildWordMap(this.nameMap);
     }
 
-    public static Countries build() {
+    private static List<Country> build() {
         List<Country> countries = new ArrayList<>();
 
         for (String country : Locale.getISOCountries()) {
@@ -53,35 +54,26 @@ public final class Countries {
                 countries.add(new Country(locale));
             }
         }
+
         countries.sort(getCountryComparator(Locale.UK));
         countries.add(0, NO_COUNTRY);
-
-        return new Countries(countries);
+        return Collections.unmodifiableList(countries);
     }
 
     public static Countries build(Set<String> countryRestrictions) {
-        List<Country> countries = new ArrayList<>();
-        Set<String> notfound = new HashSet<>(countryRestrictions);
-
-        for (String country : Locale.getISOCountries()) {
-            Locale locale = new Locale("en", country);
-            String iso = locale.getISO3Country();
-            String code = locale.getCountry();
-            String name = locale.getDisplayCountry();
-
-            if (!"".equals(iso) && !"".equals(code) && !"".equals(name) && countryRestrictions.contains(iso)) {
-                countries.add(new Country(locale));
-                notfound.remove(iso);
-            }
-        }
-        countries.sort(getCountryComparator(Locale.UK));
+        List<Country> countries = COUNTRIES.stream()
+                .filter(c -> countryRestrictions.contains(c.getIso()))
+                .collect(Collectors.toList());
         countries.add(0, NO_COUNTRY);
-
-        if (!notfound.isEmpty()) {
-            LOGGER.error("Country restriction list values that were not found = " + notfound);
-        }
-
         return new Countries(countries);
+    }
+
+    public static Countries getAll() {
+        return ALL_COUNTRIES;
+    }
+
+    public static Countries getDefault() {
+        return defaultCountries;
     }
 
     public static void setDefault(Countries countries) {
@@ -149,6 +141,12 @@ public final class Countries {
         return codeMap.get(Normalizer.normalize(Strings.nullToEmpty(code).toUpperCase(), Normalizer.Form.NFD));
     }
 
+    public Country findIsoOrCode(String code) {
+        return Nulls.coalesce(
+            () -> this.findIso(code),
+            () -> this.findCode(code));
+    }
+
     public Country findName(String name) {
         return nameMap.get(Normalizer.normalize(Strings.nullToEmpty(name).toUpperCase(), Normalizer.Form.NFD));
     }
@@ -158,50 +156,65 @@ public final class Countries {
     }
 
     public Country find(String token) {
-        if (fromIso(token) != null) {
-            return fromIso(token);
-        }
-
-        if (fromCode(token) != null) {
-            return fromCode(token);
-        }
-
-        if (fromName(token) != null) {
-            return fromName(token);
-        }
-
-        if (fromWordMap(token) != null) {
-            return fromWordMap(token);
-        }
-
-        return null;
+        return Nulls.coalesce(
+            () -> this.findIso(token),
+            () -> this.findCode(token),
+            () -> this.findName(token),
+            () -> this.findWordMap(token));
     }
 
-
+    /**
+     * @deprecated Use Countries.getDefault().getCountries();
+     */
+    @Deprecated
     public static List<Country> get() {
         return defaultCountries.getCountries();
     }
 
+    /**
+     * @deprecated Use Countries.getDefault().getCountries();
+     */
+    @Deprecated
     public static List<Country> get(Locale locale) {
         return defaultCountries.getCountries(locale);
     }
 
+    /**
+     * @deprecated Use Countries.getDefault().findIso();
+     */
+    @Deprecated
     public static Country fromIso(String iso) {
         return defaultCountries.findIso(iso);
     }
 
+    /**
+     * @deprecated Use Countries.getDefault().findCode();
+     */
+    @Deprecated
     public static Country fromCode(String code) {
         return defaultCountries.findCode(code);
     }
 
+    /**
+     * @deprecated Use Countries.getDefault().findName();
+     */
+    @Deprecated
     public static Country fromName(String name) {
         return defaultCountries.findName(name);
     }
 
+    /**
+     * @deprecated Use Countries.getDefault().findWordMap();
+     */
+    @Deprecated
     public static Country fromWordMap(String name) {
         return defaultCountries.findWordMap(name);
     }
 
+    /**
+     * @deprecated Use Countries.getDefault().find();
+     */
+    @Deprecated
     public static Country from(String token) {
         return defaultCountries.find(token);
     }

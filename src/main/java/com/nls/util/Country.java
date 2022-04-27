@@ -62,10 +62,7 @@ public final class Country implements Comparable<Country>, Serializable {
     }
 
     public static Country valueOf(String codeOrIso) {
-        Country country = Countries.fromIso(codeOrIso.trim());
-        if (country == null) {
-            country = Countries.fromCode(codeOrIso.trim());
-        }
+        Country country = Countries.getAll().findIsoOrCode(codeOrIso);
 
         if (country == null) {
             throw new IllegalStateException("Invalid country code " + codeOrIso);
