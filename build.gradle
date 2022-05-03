@@ -1,16 +1,16 @@
 group = 'com.9ls'
-version = '1.0.6'
+version = '1.0.8'
 
 project.ext {
     library_baseName = 'common-util'
 
     jacoco_limits = [
-            'instruction': 34,
-            'branch'     : 34,
-            'line'       : 32,
-            'complexity' : 35,
-            'method'     : 38,
-            'class'      : 38
+            'instruction': 42,
+            'branch'     : 39,
+            'line'       : 40,
+            'complexity' : 41,
+            'method'     : 45,
+            'class'      : 43
     ]
 
     jacoco_codecy = true
