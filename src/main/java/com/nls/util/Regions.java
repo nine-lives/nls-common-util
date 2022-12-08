@@ -33,7 +33,7 @@ public final class Regions {
                 "BRA"));
         map.put(Name.Europe, new Region(countries, Name.Europe, "Europe",
                 "GBR", "AUT", "BEL", "FRA", "DEU", "IRL", "ITA", "POL",
-                "PRT", "ESP", "CHE"));
+                "PRT", "ESP", "CHE", "GRC"));
         map.put(Name.AfricaAndMiddleEast, new Region(countries, Name.AfricaAndMiddleEast, "Africa & Middle East",
                 "KEN", "MAR", "NGA", "SAU", "ZAF", "ARE", "MOZ", "NAM", "TZA", "ZWE", "ZMB"));
         map.put(Name.AsiaPacific, new Region(countries, Name.AsiaPacific, "Asia Pacific",

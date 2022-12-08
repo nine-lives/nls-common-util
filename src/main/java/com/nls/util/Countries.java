@@ -34,7 +34,7 @@ public final class Countries {
     private final Map<String, Country> wordMap;
 
     private Countries(List<Country> countries) {
-        this.countries = Collections.unmodifiableList(countries);
+        this.countries = countries.stream().distinct().collect(Collectors.toUnmodifiableList());
         this.isoMap = countries.stream().collect(Collectors.toMap(Country::getIso, Function.identity()));
         this.codeMap = countries.stream().collect(Collectors.toMap(Country::getCode, Function.identity()));
         this.nameMap = countries.stream().collect(Collectors.toMap(o -> Normalizer.normalize(o.getName().toUpperCase(), Normalizer.Form.NFD), Function.identity()));
@@ -64,7 +64,11 @@ public final class Countries {
         List<Country> countries = COUNTRIES.stream()
                 .filter(c -> countryRestrictions.contains(c.getIso()))
                 .collect(Collectors.toList());
-        countries.add(0, NO_COUNTRY);
+
+        if (!countryRestrictions.contains(NO_COUNTRY.getIso())) {
+            countries.add(0, NO_COUNTRY);
+        }
+
         return new Countries(countries);
     }
 

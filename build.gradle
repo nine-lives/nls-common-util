@@ -1,5 +1,5 @@
 group = 'com.9ls'
-version = '1.0.8'
+version = '1.0.9'
 
 project.ext {
     library_baseName = 'common-util'

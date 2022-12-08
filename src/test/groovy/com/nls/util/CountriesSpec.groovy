@@ -3,6 +3,12 @@ package com.nls.util
 import spock.lang.Specification
 
 class CountriesSpec extends Specification {
+//    def "I can build countries"() {
+//        when:
+//        Countries.build()
+//
+//    }
+
     def "I can compare countries"() {
         when:
         Country uk1 = Countries.getAll().findIso('GBR')
