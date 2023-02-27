@@ -2,6 +2,8 @@ package com.nls.util;
 
 import com.google.common.collect.ComparisonChain;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
