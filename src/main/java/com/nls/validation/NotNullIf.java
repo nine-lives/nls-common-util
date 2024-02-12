@@ -16,6 +16,7 @@ public @interface NotNullIf {
     String fieldName();
     String ifFieldName();
     String ifFieldValue();
+    boolean negate() default false;
 
     String message() default "This field is required";
     Class<?>[] groups() default {};

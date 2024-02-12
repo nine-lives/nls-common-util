@@ -12,11 +12,13 @@ class NotNullIfValidator implements ConstraintValidator<NotNullIf, Object> {
     private String fieldName;
     private String ifFieldName;
     private String ifFieldValue;
+    private boolean negate;
 
     public void initialize(NotNullIf parameters) {
         fieldName = parameters.fieldName();
         ifFieldName = parameters.ifFieldName();
         ifFieldValue = parameters.ifFieldValue();
+        negate = parameters.negate();
     }
 
     public boolean isValid(Object object, ConstraintValidatorContext context) {
@@ -30,9 +32,8 @@ class NotNullIfValidator implements ConstraintValidator<NotNullIf, Object> {
         Object value = wrapper.getPropertyValue(fieldName);
 
         boolean valueIsEmpty = value == null || value instanceof String && Strings.isNullOrEmpty(value.toString());
-        boolean valid = ifValue == null
-                || !ifFieldValue.equals(ifValue.toString())
-                || (ifFieldValue.equals(ifValue.toString()) && !valueIsEmpty);
+        boolean ifFieldValueMatches = !negate == (ifValue != null && ifFieldValue.equals(ifValue.toString()));
+        boolean valid = !ifFieldValueMatches || !valueIsEmpty;
 
         if (!valid) {
             context.disableDefaultConstraintViolation();

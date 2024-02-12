@@ -31,7 +31,7 @@ public class TupleList<K, V> extends ArrayList<Tuple<K, V>> {
         return super.contains(new Tuple<>(v1, v2));
     }
 
-    public int indexOf( K v1, V v2) {
+    public int indexOf(K v1, V v2) {
         return super.indexOf(new Tuple<>(v1, v2));
     }
 
